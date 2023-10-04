@@ -11,7 +11,7 @@ import { useEffect, useState, useContext, createContext } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJTin3pl7Em6-O2Ve-4K-LZ5ZRHrqkdXk",
-  authDomain: "upsolve-questions.firebaseapp.com",
+  authDomain: "upsolve-it.vercel.app",
   projectId: "upsolve-questions",
   storageBucket: "upsolve-questions.appspot.com",
   messagingSenderId: "627044305411",
