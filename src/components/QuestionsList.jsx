@@ -1,15 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit, FiLink } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
+import { useFirebase } from "../context/Firebase";
+import toast from "react-hot-toast";
 
 const QuestionsList = () => {
-  const [questions, setQuestions] = useState([
-    { question: "Median of Two Sorted Arrays", questionUrl: "hello" },
-    { question: "Median of LinkedList", questionUrl: "welcome" },
-  ]);
+  const firebase = useFirebase();
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    firebase
+      .getAllQuestions()
+      .then((res) => {
+        setQuestions(res.docs);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        toast.error("Something went wrong", { id: 4 });
+      });
+  }, []);
   return (
     <>
-      {questions.length > 0 ? (
+      {loading ? (
+        <div className="w-10 mx-auto mt-10">
+          <span className="loading loading-spinner text-success"></span>
+        </div>
+      ) : questions.length > 0 ? (
         <div className="w-full max-w-[800px] mx-auto overflow-x-auto">
           <table className="table">
             {/* head */}
@@ -23,13 +42,13 @@ const QuestionsList = () => {
             </thead>
             <tbody className="text-white">
               {questions.map((question, i) => (
-                <tr className="hover">
+                <tr className="hover" key={question.id}>
                   <th>{i + 1}</th>
-                  <td className="min-w-[250px]">{question.question}</td>
+                  <td className="min-w-[250px]">{question.data().question}</td>
                   <td className=" text-xl">
                     <div>
                       <a
-                        href={question.questionUrl}
+                        href={question.data().questionUrl}
                         target="_blank"
                         className="hover:text-[#1FB2A6]"
                       >

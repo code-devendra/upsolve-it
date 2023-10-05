@@ -3,10 +3,17 @@ import {
   onAuthStateChanged,
   getAuth,
   GoogleAuthProvider,
-  signInWithRedirect,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  where,
+} from "firebase/firestore";
 
 import { useEffect, useState, useContext, createContext } from "react";
 
@@ -24,10 +31,12 @@ export const useFirebase = () => useContext(FirebaseContext);
 
 const firebaseApp = initializeApp(firebaseConfig);
 const firebaseAuth = getAuth(firebaseApp);
+const firestore = getFirestore(firebaseApp);
 
 const googleProvider = new GoogleAuthProvider();
 
 export const FirebaseProvider = (props) => {
+  // AUTH
   const [user, setUser] = useState(null);
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
@@ -39,9 +48,31 @@ export const FirebaseProvider = (props) => {
   const signInUserWithGoogle = () =>
     signInWithPopup(firebaseAuth, googleProvider);
   const logoutUser = () => signOut(firebaseAuth);
+
+  // CRUD QUESTIONS
+  const addQuestion = (question, questionUrl) =>
+    addDoc(collection(firestore, "questions"), {
+      question,
+      questionUrl,
+      userID: user.uid,
+      userEmail: user.email,
+    });
+
+  const getAllQuestions = () =>
+    getDocs(
+      collection(firestore, "questions"),
+      where("userID", "==", user.uid)
+    );
+
   return (
     <FirebaseContext.Provider
-      value={{ isLoggedIn, signInUserWithGoogle, logoutUser }}
+      value={{
+        isLoggedIn,
+        signInUserWithGoogle,
+        logoutUser,
+        addQuestion,
+        getAllQuestions,
+      }}
     >
       {props.children}
     </FirebaseContext.Provider>
