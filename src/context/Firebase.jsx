@@ -4,6 +4,7 @@ import {
   getAuth,
   GoogleAuthProvider,
   signInWithRedirect,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 
@@ -11,7 +12,7 @@ import { useEffect, useState, useContext, createContext } from "react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDJTin3pl7Em6-O2Ve-4K-LZ5ZRHrqkdXk",
-  authDomain: "upsolve-it.vercel.app",
+  authDomain: "upsolve-questions.firebaseapp.com",
   projectId: "upsolve-questions",
   storageBucket: "upsolve-questions.appspot.com",
   messagingSenderId: "627044305411",
@@ -36,7 +37,7 @@ export const FirebaseProvider = (props) => {
   }, []);
   const isLoggedIn = user ? true : false;
   const signInUserWithGoogle = () =>
-    signInWithRedirect(firebaseAuth, googleProvider);
+    signInWithPopup(firebaseAuth, googleProvider);
   const logoutUser = () => signOut(firebaseAuth);
   return (
     <FirebaseContext.Provider
