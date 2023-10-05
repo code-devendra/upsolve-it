@@ -13,11 +13,9 @@ const AddQuestion = () => {
     firebase
       .addQuestion(question, questionUrl)
       .then((res) => {
-        console.log(res);
         toast.success("Question Add Successfully", { id: 3 });
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Something went wrong", { id: 3 });
       });
   };

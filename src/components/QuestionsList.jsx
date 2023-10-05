@@ -4,7 +4,7 @@ import { MdDelete } from "react-icons/md";
 import { useFirebase } from "../context/Firebase";
 import toast from "react-hot-toast";
 
-const QuestionsList = () => {
+const QuestionsList = ({ refresh }) => {
   const firebase = useFirebase();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -17,11 +17,10 @@ const QuestionsList = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         setLoading(false);
         toast.error("Something went wrong", { id: 4 });
       });
-  }, []);
+  }, [refresh]);
   return (
     <>
       {loading ? (
@@ -48,7 +47,11 @@ const QuestionsList = () => {
                   <td className=" text-xl">
                     <div>
                       <a
-                        href={question.data().questionUrl}
+                        href={
+                          question.data().questionUrl.substring(0, 4) === "http"
+                            ? question.data().questionUrl
+                            : `https://${question.data().questionUrl}`
+                        }
                         target="_blank"
                         className="hover:text-[#1FB2A6]"
                       >

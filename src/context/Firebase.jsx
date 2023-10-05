@@ -13,6 +13,7 @@ import {
   addDoc,
   getDocs,
   where,
+  query
 } from "firebase/firestore";
 
 import { useEffect, useState, useContext, createContext } from "react";
@@ -60,8 +61,8 @@ export const FirebaseProvider = (props) => {
 
   const getAllQuestions = () =>
     getDocs(
-      collection(firestore, "questions"),
-      where("userID", "==", user.uid)
+      query(collection(firestore, "questions"),
+      where("userID", "==", user.uid))
     );
 
   return (
