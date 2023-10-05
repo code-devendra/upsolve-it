@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   getAuth,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
@@ -38,6 +39,7 @@ const firebaseAuth = getAuth(firebaseApp);
 const firestore = getFirestore(firebaseApp);
 
 const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
 
 export const FirebaseProvider = (props) => {
   // AUTH
@@ -51,6 +53,8 @@ export const FirebaseProvider = (props) => {
   const isLoggedIn = user ? true : false;
   const signInUserWithGoogle = () =>
     signInWithPopup(firebaseAuth, googleProvider);
+  const signInUserWithGithub = () =>
+    signInWithPopup(firebaseAuth, githubProvider);
   const logoutUser = () => signOut(firebaseAuth);
 
   // CRUD QUESTIONS
@@ -85,6 +89,7 @@ export const FirebaseProvider = (props) => {
       value={{
         isLoggedIn,
         signInUserWithGoogle,
+        signInUserWithGithub,
         logoutUser,
         addQuestion,
         updateQuestion,

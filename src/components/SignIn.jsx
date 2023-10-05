@@ -18,6 +18,19 @@ const SignIn = () => {
         console.log(err.message);
       });
   };
+  const handleGithubSignIn = () => {
+    firebase
+      .signInUserWithGithub()
+      .then((res) => {
+        document.getElementById("my_modal_2").classList.remove("modal-open");
+        toast.success("SignIn Successfully", {
+          id: 1,
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
   return (
     <dialog id="my_modal_2" className="modal">
       <div className="modal-box text-center text-white">
@@ -43,7 +56,10 @@ const SignIn = () => {
           <FcGoogle className="text-lg md:text-xl" /> Sign In with Google
         </button>
         <div className="divider">OR</div>
-        <button className="flex items-center justify-center gap-3 my-3 w-[80%] text-center  font-medium mx-auto py-[10px] rounded-full border border-[#1FB2A6] hover:bg-[#1FB2A6] hover:text-white transition-all ease-in-out">
+        <button
+          className="flex items-center justify-center gap-3 my-3 w-[80%] text-center  font-medium mx-auto py-[10px] rounded-full border border-[#1FB2A6] hover:bg-[#1FB2A6] hover:text-white transition-all ease-in-out"
+          onClick={handleGithubSignIn}
+        >
           <BsGithub className="text-lg md:text-xl" /> Sign In with GitHub
         </button>
       </div>
