@@ -3,10 +3,12 @@ import { FiEdit, FiLink } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import { useFirebase } from "../context/Firebase";
 import toast from "react-hot-toast";
+import UpdateQuestion from "./UpdateQuestion";
 
-const QuestionsList = ({ refresh }) => {
+const QuestionsList = ({ refresh, pageRefresh }) => {
   const firebase = useFirebase();
   const [questions, setQuestions] = useState([]);
+  const [selectedQuestion, setSelectedQuestion] = useState({});
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
@@ -21,6 +23,17 @@ const QuestionsList = ({ refresh }) => {
         toast.error("Something went wrong", { id: 4 });
       });
   }, [refresh]);
+  const handleDelete = (docId) => {
+    firebase
+      .deleteQuestion(docId)
+      .then((res) => {
+        toast.success("Question Deleted Successfully", { id: 6 });
+        pageRefresh();
+      })
+      .catch((err) => {
+        toast.error("Something went wrong", { id: 6 });
+      });
+  };
   return (
     <>
       {loading ? (
@@ -61,7 +74,20 @@ const QuestionsList = ({ refresh }) => {
                   </td>
                   <td className="flex items-center gap-4 text-xl">
                     <div className="md:tooltip md:tooltip-top" data-tip="Edit">
-                      <button className="hover:text-[#1FB2A6]">
+                      <button
+                        data-bs-target="#update"
+                        onClick={() => {
+                          setSelectedQuestion({
+                            question: question.data().question,
+                            questionUrl: question.data().questionUrl,
+                            id: question.id,
+                          });
+                          document
+                            .getElementById("my_modal_4")
+                            .classList.add("modal-open");
+                        }}
+                        className="hover:text-[#1FB2A6]"
+                      >
                         <FiEdit />
                       </button>
                     </div>
@@ -69,7 +95,10 @@ const QuestionsList = ({ refresh }) => {
                       className="md:tooltip md:tooltip-top"
                       data-tip="Delete"
                     >
-                      <button className="hover:text-red-500">
+                      <button
+                        onClick={() => handleDelete(question.id)}
+                        className="hover:text-red-500"
+                      >
                         <MdDelete />
                       </button>
                     </div>
@@ -84,6 +113,12 @@ const QuestionsList = ({ refresh }) => {
           Currently Your Question list is empty. Please add at least one.
         </h3>
       )}
+      <UpdateQuestion
+        id={"update"}
+        question={selectedQuestion.question}
+        questionUrl={selectedQuestion.questionUrl}
+        docId={selectedQuestion.id}
+      />
     </>
   );
 };

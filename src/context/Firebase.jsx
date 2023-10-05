@@ -11,9 +11,12 @@ import {
   getFirestore,
   collection,
   addDoc,
+  updateDoc,
+  doc,
   getDocs,
   where,
-  query
+  query,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { useEffect, useState, useContext, createContext } from "react";
@@ -59,10 +62,22 @@ export const FirebaseProvider = (props) => {
       userEmail: user.email,
     });
 
+  const updateQuestion = (question, questionUrl, id) => {
+    const docRef = doc(firestore, "questions", `${id}`);
+    return updateDoc(docRef, {
+      question,
+      questionUrl,
+    });
+  };
+
+  const deleteQuestion = (id) => {
+    const docRef = doc(firestore, "questions", `${id}`);
+    return deleteDoc(docRef);
+  };
+
   const getAllQuestions = () =>
     getDocs(
-      query(collection(firestore, "questions"),
-      where("userID", "==", user.uid))
+      query(collection(firestore, "questions"), where("userID", "==", user.uid))
     );
 
   return (
@@ -72,6 +87,8 @@ export const FirebaseProvider = (props) => {
         signInUserWithGoogle,
         logoutUser,
         addQuestion,
+        updateQuestion,
+        deleteQuestion,
         getAllQuestions,
       }}
     >

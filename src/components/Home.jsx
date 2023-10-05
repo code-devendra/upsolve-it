@@ -31,7 +31,10 @@ const Home = ({ auth }) => {
             </button>
           </div>
           <AddQuestion />
-          <QuestionsList refresh={refresh} />
+          <QuestionsList
+            refresh={refresh}
+            pageRefresh={() => setRefresh((prev) => !prev)}
+          />
         </>
       )}
     </div>

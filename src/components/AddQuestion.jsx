@@ -34,7 +34,7 @@ const AddQuestion = () => {
         <div className="w-full max-w-sm mx-auto mb-5">
           <input
             type="text"
-            value={question}
+            defaultValue={question}
             onChange={(e) => setQuestion(e.target.value)}
             className="inline-block w-full p-2 border border-[#1FB2A6] text-white rounded-md outline-none bg-base-200"
             placeholder="Enter a Question"
@@ -43,7 +43,7 @@ const AddQuestion = () => {
         <div className="w-full max-w-sm mx-auto mb-7">
           <input
             type="text"
-            value={questionUrl}
+            defaultValue={questionUrl}
             onChange={(e) => setQuestionUrl(e.target.value)}
             className="inline-block w-full p-2 border border-[#1FB2A6] text-white rounded-md outline-none bg-base-200"
             placeholder="Enter your question URL"
