@@ -14,6 +14,8 @@ const AddQuestion = () => {
       .addQuestion(question, questionUrl)
       .then((res) => {
         toast.success("Question Add Successfully", { id: 3 });
+        setQuestion("");
+        setQuestionUrl("");
       })
       .catch((err) => {
         toast.error("Something went wrong", { id: 3 });
